@@ -15,6 +15,9 @@ PATCH /rides/:rideId/bids/:bidId - Clients can accept a bid for their ride throu
 The application uses the following schemas for data modeling:
 
 ClientSchema: Represents a client with fields for id, name, email, and phone.
+
 FleetSchema: Represents a fleet with fields for id, name, email, and phone.
+
 BidSchema: Represents a bid with fields for id, fleetId, and bidAmount.
+
 RideSchema: Represents a ride with fields for id, clientId, pickupLocation, dropoffLocation, proposedPrice, and bids.
