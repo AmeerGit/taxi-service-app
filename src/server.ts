@@ -4,12 +4,12 @@ import { ClientSchema, FleetSchema, BidSchema, RideSchema } from './model';
 const app = express();
 app.use(express.json());
 
-mongoose.connect('mongodb+srv://admin:admin@cluster0.52ozvjb.mongodb.net/?retryWrites=true&w=majority');
+const MongoUrl = process.env.MONGO_URL || '';
 
-const db = mongoose.connection;
-db.on('error', console.error.bind(console, 'connection error:'));
-db.once('open', () => {
-  console.log('Connected to MongoDB');
+mongoose.connect(MongoUrl).then(() => {
+  console.log('Connected to MongoDB'); 
+}).catch((error) => {
+  console.error('Failed to connect to MongoDB:', error);
 });
 
 const ClientModel = mongoose.model('Client', ClientSchema);
