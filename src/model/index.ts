@@ -4,7 +4,7 @@ export const ClientSchema = new mongoose.Schema({
   id: String,
   name: String,
   email: String,
-  phone: String,
+  phone: String, 
 });
 
 export const FleetSchema = new mongoose.Schema({
