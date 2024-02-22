@@ -1,1 +1,1 @@
-# taxi-service-app  --- Please refer master branch
+#  Please refer to master branch
