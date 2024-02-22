@@ -4,7 +4,7 @@ import { ClientSchema, FleetSchema, BidSchema, RideSchema } from './model';
 const app = express();
 app.use(express.json());
 
-const MongoUrl = `mongodb+srv://user:user@cluster0.52ozvjb.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
+const MongoUrl = `mongodb+srv://user:user@cluster0.52ozvjb.mongodb.net/taxiService?retryWrites=true&w=majority&appName=Cluster0`;
 
 mongoose.connect(MongoUrl, {useUnifiedTopology: true} as mongoose.ConnectOptions).then(() => {
   console.log('Connected to MongoDB'); 
@@ -12,10 +12,23 @@ mongoose.connect(MongoUrl, {useUnifiedTopology: true} as mongoose.ConnectOptions
   console.error('Failed to connect to MongoDB:', error);
 });
 
-const ClientModel = mongoose.model('Client', ClientSchema);
-const FleetModel = mongoose.model('Fleet', FleetSchema);
-const BidModel = mongoose.model('Bid', BidSchema);
-const RideModel = mongoose.model('Ride', RideSchema);
+const ClientModel = mongoose.model('Client', ClientSchema,'Clients');
+const FleetModel = mongoose.model('Fleet', FleetSchema,'Fleets');
+const BidModel = mongoose.model('Bid', BidSchema,'Bids');
+const RideModel = mongoose.model('Ride', RideSchema,'Rides');
+ 
+
+app.post('/clients', async (req, res) => {
+  const client = new ClientModel(req.body);
+  const result = await client.save();
+  res.json(result);
+});
+
+app.post('/fleets', async (req, res) => {
+  const fleet = new FleetModel(req.body);
+  const result = await fleet.save();
+  res.json(result);
+});
 
 app.post('/rides', async (req, res) => {
   const ride = new RideModel(req.body);
