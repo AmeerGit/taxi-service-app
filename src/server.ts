@@ -14,7 +14,7 @@ mongoose.connect(MongoUrl, {useUnifiedTopology: true} as mongoose.ConnectOptions
 
 const ClientModel = mongoose.model('Client', ClientSchema,'Clients');
 const FleetModel = mongoose.model('Fleet', FleetSchema,'Fleets');
-const BidModel = mongoose.model('Bid', BidSchema,'Bids');
+const BidModel = mongoose.model('Bid', BidSchema);
 const RideModel = mongoose.model('Ride', RideSchema,'Rides');
  
 
@@ -43,15 +43,19 @@ app.get('/rides', async (req, res) => {
 });
 
 app.post('/rides/:rideId/bids', async (req, res) => {
-  const bid = new BidModel({ ...req.body, rideId: req.params.rideId });
-  const result = await bid.save();
+  const ride = new RideModel({ ...req.body, Id: req.params.rideId });
+  const result = await ride.save();
   res.json(result);
 });
 
 app.get('/rides/:rideId/bids', async (req, res) => {
-  const bids = await BidModel.find({ rideId: req.params.rideId });
-  res.json(bids);
-});
+  const ride = await RideModel.find({ id: req.params.rideId });
+  if(!ride) {
+    res.status(404).send('Ride not found');
+    return;
+  }
+  res.json(ride[0].bids);
+}); 
 
 app.patch('/rides/:rideId/bids/:bidId', async (req, res) => {
   const result = await BidModel.updateOne({ _id: req.params.bidId }, { $set: { accepted: true } });
