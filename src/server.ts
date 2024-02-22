@@ -4,9 +4,9 @@ import { ClientSchema, FleetSchema, BidSchema, RideSchema } from './model';
 const app = express();
 app.use(express.json());
 
-const MongoUrl = process.env.MONGO_URL || '';
+const MongoUrl = `mongodb+srv://user:user@cluster0.52ozvjb.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
 
-mongoose.connect(MongoUrl).then(() => {
+mongoose.connect(MongoUrl, {useUnifiedTopology: true} as mongoose.ConnectOptions).then(() => {
   console.log('Connected to MongoDB'); 
 }).catch((error) => {
   console.error('Failed to connect to MongoDB:', error);
@@ -22,6 +22,7 @@ app.post('/rides', async (req, res) => {
   const result = await ride.save();
   res.json(result);
 });
+
 
 app.get('/rides', async (req, res) => {
   const rides = await RideModel.find();
