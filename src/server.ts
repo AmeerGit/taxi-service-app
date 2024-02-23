@@ -4,7 +4,7 @@ import { ClientSchema, FleetSchema, BidSchema, RideSchema } from './model';
 const app = express();
 app.use(express.json());
 
-const MongoUrl = `mongodb+srv://user:user@cluster0.52ozvjb.mongodb.net/taxiService?retryWrites=true&w=majority&appName=Cluster0`;
+const MongoUrl='mongodb://localhost:27017/taxiService';
 
 mongoose.connect(MongoUrl, {useUnifiedTopology: true} as mongoose.ConnectOptions).then(() => {
   console.log('Connected to MongoDB'); 
@@ -43,9 +43,19 @@ app.get('/rides', async (req, res) => {
 });
 
 app.post('/rides/:rideId/bids', async (req, res) => {
-  const ride = new RideModel({ ...req.body, Id: req.params.rideId });
-  const result = await ride.save();
+ try{
+  const ride = await RideModel.find({ id: req.params.rideId });
+  if(!ride) {
+    res.status(404).send('Ride not found');
+    return;
+  }
+  const bid = new BidModel(req.body);
+  ride[0].bids.push(bid);
+  const result = await ride[0].save();
   res.json(result);
+ }catch(e){
+   res.status(500).send(e);
+ }
 });
 
 app.get('/rides/:rideId/bids', async (req, res) => {
