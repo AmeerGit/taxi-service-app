@@ -22,4 +22,4 @@ BidSchema:
 
 RideSchema: 
 
-Run the local server : npm run start
+Run the Docker : docker compose up

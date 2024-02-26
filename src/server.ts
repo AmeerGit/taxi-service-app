@@ -4,9 +4,9 @@ import { ClientSchema, FleetSchema, BidSchema, RideSchema } from './model';
 const app = express();
 app.use(express.json());
 
-const MongoUrl='mongodb://localhost:27017/taxiService';
+const MONGO_URL= 'mongodb://mongodb:27017/my_db';
 
-mongoose.connect(MongoUrl, {useUnifiedTopology: true} as mongoose.ConnectOptions).then(() => {
+mongoose.connect(MONGO_URL, {useUnifiedTopology: true} as mongoose.ConnectOptions).then(() => {
   console.log('Connected to MongoDB'); 
 }).catch((error) => {
   console.error('Failed to connect to MongoDB:', error);
@@ -20,8 +20,12 @@ const RideModel = mongoose.model('Ride', RideSchema,'Rides');
 
 app.post('/clients', async (req, res) => {
   const client = new ClientModel(req.body);
-  const result = await client.save();
-  res.json(result);
+  try{
+    const result = await client.save();
+    res.status(201).send(result);
+  }catch(e){
+    res.status(500).send(e);
+  }
 });
 
 app.post('/fleets', async (req, res) => {
