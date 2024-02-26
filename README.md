@@ -22,5 +22,5 @@ BidSchema:
 
 RideSchema: 
 
-Run the application : docker compose up
+Run the application : docker-compose up    
  It runs on port 3000.
